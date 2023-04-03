@@ -3,23 +3,27 @@ import { Meteor } from 'meteor/meteor';
 import { Col, Container, Row } from 'react-bootstrap';
 import { useTracker } from 'meteor/react-meteor-data';
 import LoadingSpinner from '../components/LoadingSpinner';
-import { Contacts } from '../../api/stuff/Contacts';
+import { Contacts } from '../../api/contact/Contacts';
 import ContactAdmin from '../components/ContactAdmin';
+import { Notes } from '../../api/note/Notes';
 
 /* Renders a table containing all of the Stuff documents. Use <StuffItem> to render each row. */
 const ListContactsAdmin = () => {
   // useTracker connects Meteor data to React components. https://guide.meteor.com/react.html#using-withTracker
-  const { ready, contacts } = useTracker(() => {
+  const { ready, contacts, notes } = useTracker(() => {
     // Note that this subscription will get cleaned up
     // when your component is unmounted or deps change.
     // Get access to Stuff documents.
     const subscription = Meteor.subscribe(Contacts.adminPublicationName);
+    const subscription2 = Meteor.subscribe(Notes.adminPublicationName);
     // Determine if the subscription is ready
-    const rdy = subscription.ready();
+    const rdy = subscription.ready() && subscription2.ready();
     // Get the Contact documents
     const contactItems = Contacts.collection.find({}).fetch();
+    const noteItems = Notes.collection.find({}).fetch();
     return {
       contacts: contactItems,
+      notes: noteItems,
       ready: rdy,
     };
   }, []);
@@ -32,7 +36,7 @@ const ListContactsAdmin = () => {
             <h2>List Contacts (Admin)</h2>
           </Col>
           <Row>
-            {contacts.map((contact) => (<Col key={contact._id}> <ContactAdmin contact={contact} /></Col>))}
+            {contacts.map((contact) => (<Col key={contact._id}> <ContactAdmin contact={contact} notes={notes.filter(note => (note.contactId === contact._id))} /></Col>))}
           </Row>
         </Col>
       </Row>
