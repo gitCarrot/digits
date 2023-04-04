@@ -1,3 +1,8 @@
+<html lang="en-US">
+
+  <body>
+    
+
 <p>Digits is an application that allows users to:</p>
 
 <ul>
@@ -121,4 +126,7 @@ in the root directory of your application.
 
 <p>It is possible to designate one or more users as “Admins” through the settings file.  When a user has the Admin role, they get access to a special NavBar link that retrieves a page listing all Contacts associated with all users:</p>
 
-<img src="doc/admin-page.png" />
+<img src="doc/note2.png"></img>
+
+</body>
+</html>
